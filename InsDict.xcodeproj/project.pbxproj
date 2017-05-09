@@ -514,7 +514,7 @@
 				DEVELOPMENT_TEAM = 275X96KVEB;
 				INFOPLIST_FILE = InsDict/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.realank.InsDict;
+				PRODUCT_BUNDLE_IDENTIFIER = com.realank.instantdict;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -527,7 +527,7 @@
 				DEVELOPMENT_TEAM = 275X96KVEB;
 				INFOPLIST_FILE = InsDict/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.realank.InsDict;
+				PRODUCT_BUNDLE_IDENTIFIER = com.realank.instantdict;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

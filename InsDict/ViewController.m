@@ -9,12 +9,14 @@
 #import "ViewController.h"
 #import "WordModel.h"
 
+#define TimeCount 30 * 6
 #define TRIM(str) [(str) stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *translateLabel;
 @property (weak, nonatomic) IBOutlet UITextField *originalTextField;
-
+@property (assign, nonatomic) BOOL needWaitForSelection;
+@property (assign, nonatomic) NSInteger timeLeft;
 @end
 
 @implementation ViewController
@@ -26,9 +28,20 @@
     [self resetLabel];
     [_originalTextField becomeFirstResponder];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldChanged) name:UITextFieldTextDidChangeNotification object:nil];
-    [WordModel translateWord:@"a" whenComplete:^(WordModel *word) {
-        NSLog(@"%@", word);
-    }];
+    CADisplayLink* link = [CADisplayLink displayLinkWithTarget:self selector:@selector(refreshTimer)];
+    link.frameInterval = 2;
+    [link addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+}
+
+- (void)refreshTimer{
+    if (_needWaitForSelection) {
+        _timeLeft--;
+        if (_timeLeft <= 0) {
+            _needWaitForSelection = NO;
+            //select all text
+            [_originalTextField selectAll:nil];
+        }
+    }
 }
 
 - (void)textFieldChanged{
@@ -45,7 +58,14 @@
 }
 
 - (void)resetLabel{
-    _translateLabel.text = @"即时辞典";
+    _needWaitForSelection = NO;
+    _translateLabel.text = @"瞬间辞典";
+}
+
+- (void)fillLabel:(NSString*)text{
+    _timeLeft = TimeCount;
+    _needWaitForSelection = YES;
+    _translateLabel.text = text;
 }
 
 - (void)translate:(NSString*)string{
@@ -56,7 +76,7 @@
                 if (weakSelf.originalTextField.text.length == 0) {
                     [weakSelf resetLabel];
                 }else{
-                    weakSelf.translateLabel.text = [word.translatedWord copy];
+                    [weakSelf fillLabel:[word.translatedWord copy]];
                 }
                 
             });
